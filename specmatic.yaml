@@ -1,0 +1,9 @@
+version: 2
+contracts:
+  - git:
+      branch: main
+      url: https://github.com/specmatic/specmatic-order-contracts.git
+    provides:
+      - io/specmatic/examples/store/openapi/data_pipeline/order_service/v1/create-order-service-v1.yaml
+    consumes:
+      - io/specmatic/examples/store/asyncapi/3_0_0/data_pipeline/order_service/v1/new-orders-async-avro-v1.yaml

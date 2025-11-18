@@ -1,0 +1,58 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        java: [17]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build BFF project with Gradle
+        run: ./gradlew build
+
+      - name: Upload HTML Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-${{ matrix.java }}-html-report
+          path: build/reports/specmatic/html
+
+      - name: Save Specmatic license
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p ~/.specmatic
+          echo "${{ secrets.SPECMATIC_LICENSE_KEY }}" > ~/.specmatic/specmatic-license.txt
+
+      - name: Run Specmatic Insights Build Reporter
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker run \
+            -v ${{ github.workspace }}:/workspace \
+            -v ${{ github.workspace }}/specmatic.yaml:/workspace/specmatic.yaml \
+            -v ~/.specmatic:/root/.specmatic \
+            -w /workspace \
+            specmatic/specmatic-reporter \
+            send-report \
+            --metadata build_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} \
+            --branch-name ${{ github.ref_name }} \
+            --repo-name ${{ github.event.repository.name }} \
+            --repo-id ${{ github.repository_id }} \
+            --repo-url ${{ github.event.repository.html_url }}

@@ -1,0 +1,20 @@
+package com.example.order.controller
+
+import com.example.order.model.OrderRequest
+import com.example.order.model.OrderResponse
+import com.example.order.service.OrderService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class OrderController(@Autowired val orderService: OrderService) {
+    @PostMapping("/orders", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun createOrder(@RequestBody orderRequest: OrderRequest): ResponseEntity<OrderResponse> =
+        ResponseEntity(orderService.createOrder(orderRequest), HttpStatus.CREATED)
+}
+
