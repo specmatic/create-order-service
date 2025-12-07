@@ -32,7 +32,7 @@ dependencies {
     implementation platform('org.springframework.boot:spring-boot-dependencies:3.5.7')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.kafka:spring-kafka:3.3.10'
+    implementation 'org.springframework.kafka:spring-kafka:3.3.11'
 
     implementation("io.confluent:kafka-avro-serializer:7.9.5")
     implementation("org.apache.avro:avro:1.12.1")
