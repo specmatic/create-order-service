@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
+import org.testcontainers.images.PullPolicy.alwaysPull
 import org.testcontainers.junit.jupiter.Testcontainers
 
 
@@ -21,6 +22,7 @@ class ContractTestsUsingTestContainer {
     private val schemaRegistryContainer = SchemaRegistry.getContainer()
     private val mockContainer: GenericContainer<*> =
         GenericContainer("specmatic/enterprise")
+            .withImagePullPolicy(alwaysPull())
             .withCommand("mock")
             .withNetworkMode("host")
             .withFileSystemBind(
@@ -32,6 +34,7 @@ class ContractTestsUsingTestContainer {
 
     private val testContainer: GenericContainer<*> =
         GenericContainer("specmatic/enterprise")
+            .withImagePullPolicy(alwaysPull())
             .withCommand("test")
             .withNetworkMode("host")
             .withFileSystemBind(
