@@ -27,7 +27,7 @@ dependencies {
     implementation platform('org.springframework.boot:spring-boot-dependencies:3.5.10')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation ('org.springframework.kafka:spring-kafka:3.3.12') {
+    implementation ('org.springframework.kafka:spring-kafka:3.3.13') {
         exclude group: 'org.lz4', module: 'lz4-java'
     }
 
